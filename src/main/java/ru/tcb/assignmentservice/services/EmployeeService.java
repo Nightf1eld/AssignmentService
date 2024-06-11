@@ -1,0 +1,8 @@
+package ru.tcb.assignmentservice.services;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class EmployeeService {
+
+}

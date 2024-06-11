@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="AssignmentService">
+        <output target="WARN">Cannot convert directly from CLOB to VARCHAR. Instead a new column will be created and the
+            data transferred. This may cause unexpected side effects including constraint issues and/or table locks.
+        </output>
+    </changeSet>
+    <changeSet id="2" author="AssignmentService">
+        <addColumn tableName="ATTRIBUTE">
+            <column afterColumn="VAL" autoIncrement="false" name="TEMP_CLOB_CONVERT" type="VARCHAR(2000)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="3" author="AssignmentService">
+        <sql splitStatements="true" stripComments="false">UPDATE "ATTRIBUTE"
+                                                          SET TEMP_CLOB_CONVERT="VAL"</sql>
+    </changeSet>
+    <changeSet id="4" author="AssignmentService">
+        <dropColumn columnName="VAL" tableName="ATTRIBUTE"/>
+    </changeSet>
+    <changeSet id="5" author="AssignmentService">
+        <renameColumn newColumnName="VAL" oldColumnName="TEMP_CLOB_CONVERT" tableName="ATTRIBUTE"/>
+    </changeSet>
+</databaseChangeLog>

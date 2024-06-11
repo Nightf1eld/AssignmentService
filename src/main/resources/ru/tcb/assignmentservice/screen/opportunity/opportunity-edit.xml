@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://jmix.io/schema/ui/window"
+        caption="msg://opportunityEdit.caption"
+        focusComponent="form">
+    <data>
+        <instance id="opportunityDc"
+                  class="ru.tcb.assignmentservice.domain.entities.Opportunity">
+            <fetchPlan extends="_base">
+                <property name="attributes"/>
+                <property name="wokrlog"/>
+            </fetchPlan>
+            <loader/>
+            <collection id="attributesDc" property="attributes"/>
+            <collection id="worklogDc" property="wokrlog"/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <screenSettings id="settingsFacet" auto="true"/>
+    </facets>
+    <actions>
+        <action id="windowCommitAndClose" caption="msg:///actions.Ok"
+                icon="EDITOR_OK"
+                primary="true"
+                shortcut="${COMMIT_SHORTCUT}"/>
+        <action id="windowClose"
+                caption="msg:///actions.Close"
+                icon="EDITOR_CANCEL"/>
+    </actions>
+    <dialogMode height="AUTO"
+                width="100%"
+                modal="true"/>
+    <layout spacing="true" expand="editActions">
+        <form id="form" dataContainer="opportunityDc">
+            <column width="350px">
+                <textField id="integrationIdField" property="integrationId"/>
+                <textField id="nameField" property="name"/>
+                <dateField id="lockedDateField" property="lockedDate"/>
+                <checkBox id="lockedField" property="locked"/>
+            </column>
+        </form>
+        <scrollBox height="300px" width="100%">
+            <dataGrid dataContainer="attributesDc" id="attributesTable" height="AUTO" minHeight="200px" width="100%">
+                <actions>
+                    <action id="create" type="create"/>
+                    <action id="edit" type="edit"/>
+                    <action id="remove" type="remove"/>
+                </actions>
+                <columns>
+                    <column property="name"/>
+                    <column property="value"/>
+                </columns>
+                <buttonsPanel>
+                    <button action="attributesTable.create"/>
+                    <button action="attributesTable.edit"/>
+                    <button action="attributesTable.remove"/>
+                </buttonsPanel>
+            </dataGrid>
+        </scrollBox>
+        <scrollBox height="400px" width="100%">
+            <dataGrid dataContainer="worklogDc" id="worklogTable" height="100%" width="100%">
+                <columns>
+                    <column property="employee"/>
+                    <column property="startDate"/>
+                    <column property="endDate"/>
+                </columns>
+            </dataGrid>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

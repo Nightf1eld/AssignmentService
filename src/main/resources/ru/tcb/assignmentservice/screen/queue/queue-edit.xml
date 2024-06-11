@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://jmix.io/schema/ui/window"
+        caption="msg://queueEdit.caption"
+        focusComponent="form">
+    <data>
+        <instance id="queueDc"
+                  class="ru.tcb.assignmentservice.domain.entities.Queue">
+            <fetchPlan extends="_base">
+                <property name="employees" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader/>
+            <collection id="employeesDc" property="employees"/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <screenSettings id="settingsFacet" auto="true"/>
+    </facets>
+    <actions>
+        <action id="windowCommitAndClose" caption="msg:///actions.Ok"
+                icon="EDITOR_OK"
+                primary="true"
+                shortcut="${COMMIT_SHORTCUT}"/>
+        <action id="windowClose"
+                caption="msg:///actions.Close"
+                icon="EDITOR_CANCEL"/>
+    </actions>
+    <dialogMode height="AUTO"
+                width="AUTO"
+                modal="true"/>
+    <layout spacing="true" expand="scrollBox">
+        <scrollBox id="scrollBox" spacing="true" width="100%">
+            <form id="form" dataContainer="queueDc">
+                <column width="600px">
+                    <textField id="nameField" property="name"/>
+                    <textField id="sequenceField" property="sequence" required="true"/>
+                    <textArea id="conditionField" property="condition" rows="5"/>
+
+                </column>
+                <column width="200px">
+                    <label value="msg://queueFlags.value" id="queueFlags"/>
+                    <checkBox id="allowManualAssignmentField" property="allowManualAssignment"/>
+                    <checkBox id="allowAutomaticAssignmentField" property="allowAutomaticAssignment"/>
+                </column>
+            </form>
+                <label value="msg://assignedEmployeesList.value" id="assignedEmployeesList"/>
+
+                <dataGrid dataContainer="employeesDc" id="employeesTable" height="600px" width="100%">
+                    <actions>
+                        <action id="add" type="add">
+                            <properties>
+                                <property name="screenId" value="EmployeePick.browse"/>
+                                <property name="openMode" value="DIALOG"/>
+                            </properties>
+                        </action>
+                        <action id="exclude" type="exclude"/>
+                    </actions>
+                    <columns>
+                        <column property="fullName"/>
+                        <column property="active"/>
+                    </columns>
+                    <buttonsPanel>
+                        <button id="addBtn" action="employeesTable.add"/>
+                        <button id="excludeBtn" action="employeesTable.exclude"/>
+                    </buttonsPanel>
+                </dataGrid>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>
