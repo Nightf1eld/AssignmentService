@@ -24,6 +24,23 @@
 
 Запрос: POST http://localhost:7777/api/v1/opportunity/release (в теле запроса передается json с параметрами: opportunity - Id заявки, delete - флаг необходимости удаления заявки из сервиса, status - статус заявки)
 
+Пример запроса:
+```
+{
+  "opportunity": "1-5YE2LKW",
+  "delete": false,
+  "status": "Верификация"
+}
+```
+
 **4. Заблокировать заявку за пользователем:**
 
 Запрос: POST http://localhost:7777/api/v1/opportunity/lock (в теле запроса передается json с параметрами: opportunity - Id заявки, employee - Id пользователя)
+
+Пример запроса:
+```
+{
+  "opportunity": "1-5YE2LKW",
+  "employee": "1-2CFCKVQ"
+}
+```
