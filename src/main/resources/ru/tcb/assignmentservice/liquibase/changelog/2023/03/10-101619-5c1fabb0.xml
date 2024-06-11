@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="AssignmentService">
+        <createTable tableName="ATTRIBUTE">
+            <column name="ID" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ATTRIBUTE"/>
+            </column>
+            <column name="VAL" type="CLOB"/>
+            <column name="OPPORTUNITY_ID" type="varchar2(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="DATETIME"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="DATETIME"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="DATETIME"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="AssignmentService">
+        <createTable tableName="EMPLOYEE">
+            <column name="ID" type="varchar2(32)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_EMPLOYEE"/>
+            </column>
+            <column name="INTEGRATION_ID" type="VARCHAR(15)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="USERNAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="FULL_NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ACTIVE_FLG" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MANAGER_FLG" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="DATETIME"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="DATETIME"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="AssignmentService">
+        <createTable tableName="OPPORTUNITY">
+            <column name="ID" type="varchar2(32)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_OPPORTUNITY"/>
+            </column>
+            <column name="INTEGRATION_ID" type="VARCHAR(15)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LOCKED_DATE" type="DATETIME"/>
+            <column name="LOCKED" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CURRENT_EMPLOYEE_ID" type="varchar2(32)"/>
+            <column name="CURRENT_QUEUE_ID" type="varchar2(32)"/>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="DATETIME"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="DATETIME"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="4" author="AssignmentService">
+        <createTable tableName="QUEUE">
+            <column name="ID" type="varchar2(32)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_QUEUE"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SEQUENCE" type="INT"/>
+            <column name="CONDITION_TEXT" type="CLOB"/>
+            <column name="MANUAL_FLG" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AUTO_FLG" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="DATETIME"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="DATETIME"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="5" author="AssignmentService">
+        <createTable tableName="QUEUE_EMPLOYEE_LINK">
+            <column name="EMPLOYEE_ID" type="varchar2(32)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_QUEUE_EMPLOYEE_LINK"/>
+            </column>
+            <column name="QUEUE_ID" type="varchar2(32)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_QUEUE_EMPLOYEE_LINK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="6" author="AssignmentService">
+        <createIndex indexName="IDX_ATTRIBUTE_OPPORTUNITY" tableName="ATTRIBUTE">
+            <column name="OPPORTUNITY_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="OPPORTUNITY_ID" baseTableName="ATTRIBUTE"
+                                 constraintName="FK_ATTRIBUTE_ON_OPPORTUNITY" referencedColumnNames="ID"
+                                 referencedTableName="OPPORTUNITY"/>
+    </changeSet>
+    <changeSet id="7" author="AssignmentService">
+        <createIndex indexName="IDX_OPPORTUNITY_CURRENTEMPLOYE" tableName="OPPORTUNITY">
+            <column name="CURRENT_EMPLOYEE_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="CURRENT_EMPLOYEE_ID" baseTableName="OPPORTUNITY"
+                                 constraintName="FK_OPPORTUNITY_ON_CURRENTEMPLO" referencedColumnNames="ID"
+                                 referencedTableName="EMPLOYEE"/>
+    </changeSet>
+    <changeSet id="8" author="AssignmentService">
+        <createIndex indexName="IDX_OPPORTUNITY_CURRENT_QUEUE" tableName="OPPORTUNITY">
+            <column name="CURRENT_QUEUE_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="CURRENT_QUEUE_ID" baseTableName="OPPORTUNITY"
+                                 constraintName="FK_OPPORTUNITY_ON_CURRENTQUEUE" referencedColumnNames="ID"
+                                 referencedTableName="QUEUE"/>
+    </changeSet>
+    <changeSet id="9" author="AssignmentService">
+        <addForeignKeyConstraint baseColumnNames="EMPLOYEE_ID" baseTableName="QUEUE_EMPLOYEE_LINK"
+                                 constraintName="FK_QUEEMP_ON_EMPLOYEE" referencedColumnNames="ID"
+                                 referencedTableName="EMPLOYEE"/>
+    </changeSet>
+    <changeSet id="10" author="AssignmentService">
+        <addForeignKeyConstraint baseColumnNames="QUEUE_ID" baseTableName="QUEUE_EMPLOYEE_LINK"
+                                 constraintName="FK_QUEEMP_ON_QUEUE" referencedColumnNames="ID"
+                                 referencedTableName="QUEUE"/>
+    </changeSet>
+</databaseChangeLog>

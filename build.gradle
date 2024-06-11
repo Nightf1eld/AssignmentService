@@ -1,0 +1,65 @@
+plugins {
+    id 'io.jmix' version '1.4.2'
+    id 'java'
+}
+
+apply plugin: 'org.springframework.boot'
+
+jmix {
+    bomVersion = '1.4.2'
+}
+
+group = 'ru.tcb'
+version = '1.0'
+
+repositories {
+    gradlePluginPortal()
+    mavenCentral()
+    maven {
+        url 'https://global.repo.jmix.io/repository/public'
+    }
+}
+
+dependencies {
+    implementation 'io.jmix.core:jmix-core-starter'
+    implementation 'io.jmix.data:jmix-eclipselink-starter'
+    implementation 'io.jmix.ui:jmix-ui-starter'
+    implementation 'io.jmix.ui:jmix-ui-data-starter'
+    implementation 'io.jmix.ui:jmix-ui-themes-compiled'
+    implementation 'io.jmix.ui:jmix-ui-widgets-compiled'
+    implementation 'io.jmix.security:jmix-security-starter'
+    implementation 'io.jmix.security:jmix-security-ui-starter'
+    implementation 'io.jmix.security:jmix-security-data-starter'
+    implementation 'io.jmix.localfs:jmix-localfs-starter'
+    implementation 'io.jmix.datatools:jmix-datatools-starter'
+    implementation 'io.jmix.datatools:jmix-datatools-ui-starter'
+    implementation 'net.bytebuddy:byte-buddy'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    implementation 'io.jmix.audit:jmix-audit-ui-starter'
+    implementation 'io.jmix.audit:jmix-audit-starter'
+    implementation 'io.jmix.rest:jmix-rest-starter'
+    implementation 'io.jmix.security:jmix-security-oauth2-starter'
+    implementation 'io.jmix.translations:jmix-translations-ru'
+
+    compileOnly 'org.projectlombok:lombok:1.18.26'
+    annotationProcessor 'org.projectlombok:lombok:1.18.26'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.26'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
+    implementation 'io.jmix.ldap:jmix-ldap-starter'
+    implementation 'com.oracle.database.jdbc:ojdbc8'
+    implementation group: 'com.oracle.ojdbc', name: 'orai18n', version: '19.3.0.0'
+
+    implementation 'io.jmix.appsettings:jmix-appsettings-starter'
+    implementation 'io.jmix.appsettings:jmix-appsettings-ui-starter'
+}
+
+test {
+    useJUnitPlatform()
+}

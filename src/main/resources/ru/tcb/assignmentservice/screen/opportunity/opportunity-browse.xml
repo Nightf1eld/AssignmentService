@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://jmix.io/schema/ui/window"
+        xmlns:c="http://jmix.io/schema/ui/jpql-condition"
+        caption="msg://opportunityBrowse.caption"
+        focusComponent="opportunitiesTable">
+    <data readOnly="true">
+        <collection id="opportunitiesDc"
+                    class="ru.tcb.assignmentservice.domain.entities.Opportunity">
+            <fetchPlan extends="_base">
+                <property name="currentEmployee" fetchPlan="_instance_name"/>
+                <property name="currentQueue" fetchPlan="_instance_name"/>
+            </fetchPlan>
+            <loader id="opportunitiesDl">
+                <query>
+                    <![CDATA[select e from Opportunity e order by e.createdDate desc]]>
+                    <condition>
+                        <and>
+                        <c:jpql>
+                            <c:where>e.currentQueue = :queue</c:where>
+                        </c:jpql>
+                        <c:jpql>
+                            <c:where>e.name like concat('%',:name, '%')</c:where>
+                        </c:jpql>
+                        </and>
+                    </condition>
+                </query>
+            </loader>
+        </collection>
+        <collection id="queuesDc" class="ru.tcb.assignmentservice.domain.entities.Queue">
+            <fetchPlan extends="_base"/>
+            <loader>
+                <query>
+                    <![CDATA[select q from Queue q order by q.sequence]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="employeesDc" class="ru.tcb.assignmentservice.domain.entities.Employee">
+            <fetchPlan extends="_base"/>
+            <loader id="employeesDl">
+                <query>
+                    <![CDATA[select distinct e from Employee e left join e.queues q order by e.fullName]]>
+                    <condition>
+                        <c:jpql>
+                            <c:where>q = :queue</c:where>
+                        </c:jpql>
+                    </condition>
+                </query>
+            </loader>
+        </collection>
+        <collection id="manualQueuesDc" class="ru.tcb.assignmentservice.domain.entities.Queue">
+            <fetchPlan extends="_instance_name"/>
+            <loader>
+                <query>
+                    <![CDATA[select q from Queue q where q.allowManualAssignment = true order by q.sequence]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <screenSettings id="settingsFacet" auto="true"/>
+    </facets>
+    <actions>
+        <action id="lookupSelectAction"
+                caption="msg:///actions.Select"
+                icon="LOOKUP_OK"
+                primary="true"
+                shortcut="${COMMIT_SHORTCUT}"/>
+        <action id="lookupCancelAction"
+                caption="msg:///actions.Cancel"
+                icon="LOOKUP_CANCEL"/>
+    </actions>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="opportunitiesTable" spacing="true">
+        <form width="100%">
+            <textField id="searchField" caption="msg://searchField.caption" textChangeEventMode="EAGER"/>
+            <entityComboBox optionsContainer="queuesDc"
+                            caption="msg://queueSelectionField.caption"
+                            id="queueSelectionField"/>
+        </form>
+        <dataGrid id="opportunitiesTable"
+                  width="100%"
+                  dataContainer="opportunitiesDc"
+                  selectionMode="MULTI"
+        >
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+                <action id="assign" caption="msg://assign.caption" icon="ADDRESS_BOOK"/>
+                <action id="assignAuto" caption="msg://assignAuto.caption" icon="AUTOMOBILE"/>
+                <action id="refresh" type="refresh"/>
+            </actions>
+            <columns>
+                <column property="integrationId" id="integrationId"/>
+                <column property="name" id="name"/>
+                <column property="createdDate" id="createdDate"/>
+                <column property="lockedDate" id="lockedDate"/>
+                <column property="locked" id="locked"/>
+                <column id="status" caption="msg://status.caption">
+                    <iconRenderer/>
+                </column>
+                <column property="currentEmployee" id="currentEmployee"/>
+                <column property="currentQueue" id="currentQueue"/>
+            </columns>
+            <simplePagination/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="opportunitiesTable.create"/>
+                <button id="editBtn" action="opportunitiesTable.edit"/>
+                <button id="refreshBtn" action="opportunitiesTable.refresh"/>
+                <button id="removeBtn" action="opportunitiesTable.remove"/>
+                <button id="assignBtn" action="opportunitiesTable.assign"/>
+                <button id="automaticBtn" action="opportunitiesTable.assignAuto"/>
+            </buttonsPanel>
+        </dataGrid>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
